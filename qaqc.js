@@ -4,6 +4,6 @@ qaqc.ui=(target='qaqcDiv')=>{
     if(typeof(target)=='string'){
         target=document.getElementById(target)
     }
-    //debugger
-
+    let h='<p style="color:navy">Read a file, URL, or paste dataset as text</p>'
+    target.innerHTML=h
 }

@@ -1,4 +1,4 @@
-console.log(`jonas.js loaded at ${Date()}`)
+console.log(`jonas.js ran at ${Date()}`)
 
 runQAQC=function(txt){
     //
