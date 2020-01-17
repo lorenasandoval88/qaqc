@@ -14,8 +14,8 @@
             <a href="https://github.com/episphere/qaqc/issues" target="_blank" data-toggle="tooltip" data-placement="right" title="submit issue"><i class="fa fa-exclamation" style="color:maroon"></i></a>            
         </h2>
         <p class="info">Quality Control / Quality Analyis</p>
-        
-        <ul id="scriptList">
+        <h3>Script list</h3> 
+        <ol id="scriptList">
         <li><input type="radio" name="run" class="runScript" checked> none</li>
         <li><input type="radio" name="run" class="runScript"> jonas.js - Jonas' QAQC experiments</li>
         <li><input type="radio" name="run" class="runScript"> lorena.js - the real thing by Lorena</li>
@@ -28,7 +28,14 @@
                     if(el.value!='none'){
                         let s=document.createElement('script')
                         s.src=el.parentElement.parentElement.scriptSrc=el.value
+                        //s.onload=qaqc.dataAnalysis
                         document.head.appendChild(s)
+                        if(document.getElementById('qaqcReport')){
+                            document.getElementById('qaqcReport').innerHTML='<p style="color:red">... if this takes too long please <a href="https://github.com/episphere/qaqc/issues" target="_blank">create an issue</a>.</p>'
+                        }
+                        setTimeout(qaqc.dataAnalysis,1000)
+                    }else{
+
                     }
                 }
             })
@@ -38,7 +45,8 @@
         <hr>
         <div id="qaqcDiv"><span style="color:red">Loading ... <br>if this takes too long please <a href="https://github.com/episphere/qaqc/issues" target="_blank">create an issue</a>.</span></div>
         <hr>
-        <h3>Computation</h3>
+        <div id="dataAnalysisDiv"></div>
+        <h3>Privacy</h3>
         <p class="info"> All computation takes place in this browser session. No data is transmited to a server, because there is no server supporting this application. The main purpose of this tool is indeed to illustrate how serverless statistical proceedures, particulalry data wrangling, can migrate to where the data is without exposing the source data. </p>
     </div>
 </body>

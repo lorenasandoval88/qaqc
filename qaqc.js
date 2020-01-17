@@ -16,9 +16,15 @@ qaqc.openFile=(ev)=>{ // inspired by https://www.javascripture.com/FileReader
     reader.onload = function(){
       qaqc.dataTxt = reader.result;  // qaqc.dataTxt is defined here, it will be undefined by default
       qaqc.tabulateTxt()
-      fileInfo.innerText+=`\n...`
+      qaqc.dataAnalysis()
     };
     reader.readAsText(input.files[0]);
+}
+
+qaqc.loadURL=async(url=inputURL.value)=>{
+    qaqc.dataTxt = await (await fetch(url)).text()
+    qaqc.tabulateTxt()
+    qaqc.dataAnalysis()
 }
 
 qaqc.load=el=>{
@@ -26,8 +32,12 @@ qaqc.load=el=>{
     switch(el.id){
         case 'loadFile':
             h=`<input type="file" id="readButton" onchange="qaqc.openFile(event)">`
-            h+='<pre id="fileInfo">upload by choosing file</pre>'
-            loadQAQC.innerHTML=h
+            h+='<pre id="fileInfo">upload file from your hard-disk</pre>'
+            loadQAQC.innerHTML=h;
+            setTimeout(function(){readButton.click()},100)
+        break
+        case 'loadURL':
+            h=`URL: <input id="inputURL"> <i style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="click to load file from url" onclick="qaqc.loadURL()"></i>`
         break
         default:
             console.warn(`button with id "${el.id}" not found`)
@@ -52,3 +62,18 @@ qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
         })
     })
 }
+
+qaqc.dataAnalysis=(div="dataAnalysisDiv")=>{
+    console.log(`qaqc analysis triggered at ${Date()}`)
+    if(typeof(div)=='string'){div=document.getElementById(div)}
+    if(qaqc.data){
+        if(typeof(runQAQC)!='undefined'){
+            div.innerHTML=`<h2>Report</h2>
+            <p style="font-size:small;color:green">[${Date()}]</p>
+            <div id="qaqcReport">${runQAQC(qaqc.data)}</div>`    
+        }else{
+            div.innerHTML='<h3 style="color:red">no runQAQC function found ...</h3><p style="color:red">... please chose one from the Script List above</p>'
+        }
+    }
+}
+
