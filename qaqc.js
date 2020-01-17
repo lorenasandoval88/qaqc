@@ -11,9 +11,12 @@ qaqc.ui=(target='qaqcDiv')=>{
 
 qaqc.openFile=(ev)=>{ // inspired by https://www.javascripture.com/FileReader
     var input = ev.target;
+    fileInfo.innerText=new Date(input.files[0].lastModified)
     var reader = new FileReader();
     reader.onload = function(){
       qaqc.dataTxt = reader.result;  // qaqc.dataTxt is defined here, it will be undefined by default
+      qaqc.tabulateTxt()
+      fileInfo.innerText+=`\n...`
     };
     reader.readAsText(input.files[0]);
 }
@@ -23,6 +26,7 @@ qaqc.load=el=>{
     switch(el.id){
         case 'loadFile':
             h=`<input type="file" id="readButton" onchange="qaqc.openFile(event)">`
+            h+='<pre id="fileInfo">upload by choosing file</pre>'
             loadQAQC.innerHTML=h
         break
         default:
@@ -42,12 +46,9 @@ qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
     labels.forEach((label)=>{
         qaqc.data[label]=[]
     }) 
-    arr.slice(1).forEach(row=>{
-        labels.forEach((label,i)=>{
-            qaqc.data[label]=row[i]
+    arr.slice(1).forEach((row,i)=>{
+        labels.forEach((label,j)=>{
+            qaqc.data[label][i]=row[j]
         })
     })
-
-
-    debugger
 }
