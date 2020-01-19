@@ -4,7 +4,7 @@ qaqc.ui=(target='qaqcDiv')=>{
     if(typeof(target)=='string'){
         target=document.getElementById(target)
     }
-    let h='<p style="color:navy">Load a <button id="loadFile" onclick="qaqc.load(this)">file</button>, <button id="loadURL" onclick="qaqc.load(this)">URL</button>, <button id="loadBox" onclick="qaqc.load(this)">Box id</button>, or , <button id="loadTxt" onclick="qaqc.load(this)">paste data as text</button></p>'
+    let h='<p style="color:navy">Load a <button id="loadFile" onclick="qaqc.load(this)">file</button>, <button id="loadURL" onclick="qaqc.load(this)">URL</button>, <button id="loadBox" onclick="qaqc.load(this)">Box id</button>, or <button id="loadTxt" onclick="qaqc.load(this)">paste data as text</button></p>'
     h +='<div id="loadQAQC" style="color:blue"></div>'
     target.innerHTML=h
 }
@@ -37,7 +37,7 @@ qaqc.load=el=>{
             setTimeout(function(){readButton.click()},100)
         break
         case 'loadURL':
-            h=`URL: <input id="inputURL"> <i style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="click to load file from url" onclick="qaqc.loadURL()"></i>`
+            h=`URL: <input id="inputURL"> <i id="loadFileFromURL" style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="click to load file from url" onclick="qaqc.loadURL()"></i>`
         break
         default:
             console.warn(`button with id "${el.id}" not found`)
@@ -77,3 +77,35 @@ qaqc.dataAnalysis=(div="dataAnalysisDiv")=>{
     }
 }
 
+// processing url composition
+
+qaqc.getParms=function(){
+    if(localStorage.qaqcParms){
+        qaqc.parms=JSON.parse(localStorage.qaqcParms)
+    }else{
+        qaqc.parms={}
+    }
+    let pp = location.hash.slice(1)+location.search.slice(1)
+    pp.split('&').forEach(av=>{
+        av=av.split('=')
+        qaqc.parms[av[0]]=av[1]
+    })
+    
+    // actions
+    if(qaqc.parms.url){
+        setTimeout(_=>{
+            loadURL.click()
+            inputURL.value=qaqc.parms.url
+            loadFileFromURL.click()
+        },1000)
+    }
+    if(qaqc.parms.script){
+        setTimeout(_=>{
+            document.querySelectorAll('.runScript')[qaqc.parms.script].click()
+        },100)
+    }
+
+
+    //debugger
+}
+qaqc.getParms()
