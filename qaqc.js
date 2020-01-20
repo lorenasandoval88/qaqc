@@ -93,7 +93,8 @@ qaqc.dataAnalysis=(div="dataAnalysisDiv")=>{
         if(typeof(runQAQC)!='undefined'){
             div.innerHTML=`<h2>Report</h2>
             <p style="font-size:small;color:green">[${Date()}]</p>
-            <div id="qaqcReport">${runQAQC(qaqc.data)}</div>`    
+            <div id="qaqcReport">${runQAQC(qaqc.data)}</div>
+            <hr>`    
         }else{
             div.innerHTML='<h3 style="color:red">no runQAQC function found ...</h3><p style="color:red">... please chose one from the Script List above</p>'
         }
