@@ -22,7 +22,7 @@ qaqc.openFile=(ev)=>{ // inspired by https://www.javascripture.com/FileReader
 }
 
 qaqc.loadURL=async(url=inputURL.value)=>{
-    qaqc.dataTxt = await (await fetch(url)).text()
+    qaqc.dataTxt = (await (await fetch(url)).text()).trim()
     qaqc.tabulateTxt()
     qaqc.dataAnalysis()
 }
@@ -61,6 +61,29 @@ qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
             qaqc.data[label][i]=row[j]
         })
     })
+    labels.forEach(label=>{
+        qaqc.data[label]=qaqc.numberType(qaqc.data[label])
+    })
+}
+
+qaqc.numberType=aa=>{ // try to fit numeric typing
+    let tp='number'
+    aa.forEach(a=>{
+        if(!((a==parseFloat(a))||(a=='undefined'))){
+            tp='string'
+        }
+    })
+    if(tp=='number'){
+        aa=aa.map(a=>{
+            if(a=='undefined'){
+                a=undefined
+            }else{
+                a=parseFloat(a)
+            }
+            return a
+        })
+    }
+    return aa
 }
 
 qaqc.dataAnalysis=(div="dataAnalysisDiv")=>{
