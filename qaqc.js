@@ -14,7 +14,7 @@ qaqc.openFile=(ev)=>{ // inspired by https://www.javascripture.com/FileReader
     fileInfo.innerText=new Date(input.files[0].lastModified)
     var reader = new FileReader();
     reader.onload = function(){
-      qaqc.dataTxt = reader.result;  // qaqc.dataTxt is defined here, it will be undefined by default
+      qaqc.dataTxt = reader.result.trim();  // qaqc.dataTxt is defined here, it will be undefined by default
       qaqc.tabulateTxt()
       qaqc.dataAnalysis()
     };
@@ -37,7 +37,8 @@ qaqc.load=el=>{
             setTimeout(function(){readButton.click()},100)
         break
         case 'loadURL':
-            h=`URL: <input id="inputURL"> <i id="loadFileFromURL" style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="click to load file from url" onclick="qaqc.loadURL()"></i>`
+            h=`URL: <input id="inputURL"> <i id="loadFileFromURL" style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="Load file from url" onclick="qaqc.loadURL()"></i> <i style="cursor:pointer" class="fa fa-external-link" data-toggle="tooltip" data-placement="left" title="open file in new tab"
+ onclick="window.open(document.getElementById('inputURL').value)"></i>`
         break
         default:
             console.warn(`button with id "${el.id}" not found`)
@@ -48,22 +49,28 @@ qaqc.load=el=>{
 
 
 qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
-    const arr =txt.split(/[\r\n]/g).map(row=>{  // data array
-        return row.split(/[,\t]/g) // split csv and tsv alike
-    })
-    qaqc.data={} // qaqc.data is defined here, it will be undefined by default
-    labels= arr[0]
-    labels.forEach((label)=>{
-        qaqc.data[label]=[]
-    }) 
-    arr.slice(1).forEach((row,i)=>{
-        labels.forEach((label,j)=>{
-            qaqc.data[label][i]=row[j]
+    if(txt.slice(0,1)=='['){txt='{'+txt+'}'}
+    if(txt.slice(0,1)=='{'){
+        qaqc.data=JSON.parse(txt)
+    }else{
+        const arr =txt.split(/[\r\n]/g).map(row=>{  // data array
+            return row.split(/[,\t]/g) // split csv and tsv alike
         })
-    })
-    labels.forEach(label=>{
-        qaqc.data[label]=qaqc.numberType(qaqc.data[label])
-    })
+        qaqc.data={} // qaqc.data is defined here, it will be undefined by default
+        labels= arr[0]
+        labels.forEach((label)=>{
+            qaqc.data[label]=[]
+        }) 
+        arr.slice(1).forEach((row,i)=>{
+            labels.forEach((label,j)=>{
+                qaqc.data[label][i]=row[j]
+            })
+        })
+        labels.forEach(label=>{
+            qaqc.data[label]=qaqc.numberType(qaqc.data[label])
+        })
+    }
+        
 }
 
 qaqc.numberType=aa=>{ // try to fit numeric typing
@@ -96,19 +103,6 @@ qaqc.saveFile=(txt,fileName)=>{
         a.click(); 
         //return a
     }else{
-        /*
-        let sp = document.createElement('span')
-        sp.innerHTML='file name: '
-        let ip = document.createElement('input')
-        sp.appendChild(ip)
-        let bt = document.createElement('button')
-        sp.appendChild(bt)
-        bt.innerText='save'
-        bt.onclick=function(){
-            debugger
-        }
-        return sp
-        */
         let h=`filename:<input><button onclick="qaqc.saveFile(decodeURIComponent('${encodeURIComponent(txt)}'),this.parentElement.querySelector('input').value)" txt="${txt}">save data as JSON</button>`
         return h
     }      
