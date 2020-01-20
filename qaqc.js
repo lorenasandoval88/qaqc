@@ -86,6 +86,34 @@ qaqc.numberType=aa=>{ // try to fit numeric typing
     return aa
 }
 
+qaqc.saveFile=(txt,fileName)=>{
+    if(fileName){
+        const bb = new Blob([txt]);
+        const url = URL.createObjectURL(bb);
+        let a = document.createElement('a');
+        a.href=url;
+        a.download=fileName;
+        a.click(); 
+        //return a
+    }else{
+        /*
+        let sp = document.createElement('span')
+        sp.innerHTML='file name: '
+        let ip = document.createElement('input')
+        sp.appendChild(ip)
+        let bt = document.createElement('button')
+        sp.appendChild(bt)
+        bt.innerText='save'
+        bt.onclick=function(){
+            debugger
+        }
+        return sp
+        */
+        let h=`filename:<input><button onclick="qaqc.saveFile(decodeURIComponent('${encodeURIComponent(txt)}'),this.parentElement.querySelector('input').value)" txt="${txt}">save data as JSON</button>`
+        return h
+    }      
+}
+
 qaqc.dataAnalysis=(div="dataAnalysisDiv")=>{
     console.log(`qaqc analysis triggered at ${Date()}`)
     if(typeof(div)=='string'){div=document.getElementById(div)}

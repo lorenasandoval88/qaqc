@@ -8,6 +8,7 @@ runQAQC=function(data){
         h+=`<li style="color:blue">${k} (${qaqc.data[k].length} x ${typeof(qaqc.data[k][0])=='string' ? 'string' : 'number'})</li>`
     })
     h+='</p>'
+    h+=qaqc.saveFile(JSON.stringify(qaqc.data))
     //debugger
     // ...
     return h
