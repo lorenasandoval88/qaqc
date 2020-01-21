@@ -40,6 +40,14 @@ qaqc.load=el=>{
             h=`URL: <input id="inputURL"> <i id="loadFileFromURL" style="font-size:xx-large;color:green;cursor:pointer;vertical-align:bottom" class="fa fa-cloud-download" data-toggle="tooltip" data-placement="left" title="Load file from url" onclick="qaqc.loadURL()"></i> <i style="cursor:pointer" class="fa fa-external-link" data-toggle="tooltip" data-placement="left" title="open file in new tab"
  onclick="window.open(document.getElementById('inputURL').value)"></i>`
         break
+        case 'loadBox':
+            h=`<pre id="epibox_msg"></pre>
+<button onclick="epibox.checkToken()">Check</button>
+<button onclick="epibox.refreshToken()">Refresh</button>
+<button onclick="(async function(){await epibox.getUser();epibox.msg(JSON.stringify(epibox.oauth.user,null,3))})()">User</button>
+<button onclick="epibox.logout()">Logout</button>
+<button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>`
+        break
         default:
             console.warn(`button with id "${el.id}" not found`)
         break
