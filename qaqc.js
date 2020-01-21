@@ -42,11 +42,41 @@ qaqc.load=el=>{
         break
         case 'loadBox':
             h=`<pre id="epibox_msg"></pre>
-<button onclick="epibox.checkToken()">Check</button>
-<button onclick="epibox.refreshToken()">Refresh</button>
-<button onclick="(async function(){await epibox.getUser();epibox.msg(JSON.stringify(epibox.oauth.user,null,3))})()">User</button>
-<button onclick="epibox.logout()">Logout</button>
-<button onclick="localStorage.removeItem('epiboxtoken');location.reload()">Restart</button>`
+            <button onclick="epibox.checkToken()">Session</button>
+            <button onclick="epibox.refreshToken()">Refresh</button>
+            <button onclick="(async function(){await epibox.getUser();epibox.msg(JSON.stringify(epibox.oauth.user,null,3))})()">User</button>
+            <button onclick="epibox.logout()">Logout</button>
+            file id: <input id="boxInput">`
+            setTimeout(async _=>{
+                let ip=document.getElementById('boxInput')
+                ip.focus()
+                ip.onkeyup=evt=>{
+                    if(evt.keyCode==13){ // if enter, for the iris.csv demo use 602505986610
+                        epibox.msg('reading file ...')
+                        epibox.getText(`https://api.box.com/2.0/files/${ip.value}/content`).then(txt=>{
+                            epibox.msg('... done')
+                            qaqc.dataTxt=txt
+                            qaqc.tabulateTxt()
+                            qaqc.dataAnalysis()
+                        })
+                        /*
+                        fetch(`https://api.box.com/2.0/files/${ip.value}/content`,{
+                            method:'GET',
+                            headers:{
+                                Authorization:"Bearer "+epibox.oauth.token.access_token
+                            }
+                        }).then(x=>{
+                            x.text().then(txt=>{
+                                debugger
+                            })
+                            
+                        })
+                        */
+                    }
+                    //debugger
+                }
+                epibox.checkToken()
+            },1000)
         break
         default:
             console.warn(`button with id "${el.id}" not found`)
