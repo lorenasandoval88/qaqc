@@ -91,9 +91,11 @@ qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
     if(txt.slice(0,1)=='{'){
         qaqc.data=JSON.parse(txt)
     }else{
-        const arr =txt.split(/[\r\n]/g).map(row=>{  // data array
+        let arr =txt.split(/[\r\n]+/g).map(row=>{  // data array
+            //if(row[0]=='    '){row='undefined   '+row}
             return row.split(/[,\t]/g) // split csv and tsv alike
         })
+        if(arr.slice(-1).toLocaleString()==""){arr.pop()}
         qaqc.data={} // qaqc.data is defined here, it will be undefined by default
         labels= arr[0]
         labels.forEach((label)=>{
@@ -114,13 +116,13 @@ qaqc.tabulateTxt=(txt=qaqc.dataTxt)=>{
 qaqc.numberType=aa=>{ // try to fit numeric typing
     let tp='number'
     aa.forEach(a=>{
-        if(!((a==parseFloat(a))||(a=='undefined'))){
+        if(!((a==parseFloat(a))||(a=='undefined')||(a==''))){
             tp='string'
         }
     })
     if(tp=='number'){
         aa=aa.map(a=>{
-            if(a=='undefined'){
+            if(a=='undefined'||a==''){
                 a=undefined
             }else{
                 a=parseFloat(a)
