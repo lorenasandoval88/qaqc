@@ -29,7 +29,7 @@ runQAQC= function(data){
 // let txt = `<p>Variables: ${Object.keys(qaqc.data)} </p>`
 
 let txt= qaqc.dataTxt
-let txtFile= `<p>${Object(qaqc.dataTxt)} </p>`
+
 return txt
 //return getColumn(txt,1)
 }
