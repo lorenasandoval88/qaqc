@@ -14,27 +14,24 @@ console.log(`lorena.js ran at ${Date()}`)
 //   // ...
 //   return h
 // }
-function getColumn(table_id, col) {
-        var tab = document.getElementById(table_id);
-        var n = tab.rows.length;
-        var i, s = null, tr, td;
-
-        // First check that col is not less then 0
-        if (col < 0) {
-            return null
-            console.log("null")
-            alert("lore")
-             // Here you could say else { return null; } if you want it to fail
-              // when requested column is out of bounds. It depends.
-            }}
-console.log("null")
-
+//https://stackoverflow.com/questions/7848004/get-column-from-a-two-dimensional-array
 //https://stackoverflow.com/questions/22097155/javascript-get-entire-2nd-column
 runQAQC= function(data){
-
+  function getColumn(table, col) {
+    var column = [];
+     for(var i=0; i<table.length; i++){
+        column.push(table[i][col]);
+     }
+     return column;
+               // Here you could say else { return null; } if you want it to fail
+                // when requested column is out of bounds. It depends.
+              }
 // let txt = `<p>Variables: ${Object.keys(qaqc.data)} </p>`
-// return txt
-let txtFile= `<p>Data:${Object(qaqc.dataTxt)} </p>`
-return txtFile
-//console.log(txtFile)
+
+let txt= qaqc.dataTxt
+let txtFile= `<p>${Object(qaqc.dataTxt)} </p>`
+return txt
+//return getColumn(txt,1)
 }
+
+//console.log(txtFile)
