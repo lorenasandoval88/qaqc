@@ -5,7 +5,7 @@ runQAQC=function(data){
   let h=`<p>Variables: ${Object.keys(data)} </p>`
   h+='<p style="color:blue">Data:'
   Object.values(qaqc.data).forEach(k=>{
-      h+=`<li style="color:blue">${k} (${qaqc.data[k]}</li>`
+      h+=`<li style="color:blue">${k}</li>`
   })
   h+='</p>'
   h+=qaqc.saveFile(JSON.stringify(qaqc.data))
