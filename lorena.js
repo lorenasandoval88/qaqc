@@ -1,19 +1,24 @@
-
-
-runQAQC=function(data){
+runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
-  let h=`<p>Variables: ${Object.keys(data)} </p>`
-  h+='<p style="color:blue">Data:'
-  Object.values(qaqc.data).forEach(k=>{
-      h+=`<li style="color:blue">${k}</li>`
-  })
-  h+='</p>'
-  h+=qaqc.saveFile(JSON.stringify(qaqc.data))
-  //debugger
-  // ...
-  return h
-}
 
+
+
+    //let h = `<p>Variables: ${Object.keys(data)} </p>`
+    let key_len= Object.keys(qaqc.data).length
+    for (i=1; i< key_len; i++){
+
+    let h= `<p> Data: </p>`
+    h += '<p style="color:blue">'
+    for (const [key, value] of Object.entries(qaqc.data)) { //List of columns and rows
+      h += `<li style="color:blue">${key}: ${value}</li>`
+    }
+    h += '</p>'
+    h += qaqc.saveFile(JSON.stringify(qaqc.data))
+    //debugger
+    // ...
+    return h
+  }
+}
 
 
 
