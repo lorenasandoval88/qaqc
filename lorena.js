@@ -1,59 +1,37 @@
 runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
+  //let h = `<p>Variables: ${Object.keys(data)} </p>`
+  let key_len = Object.keys(qaqc.data).length
+  for (i = 1; i < key_len; i++) {
 
-
-    //let h = `<p>Variables: ${Object.keys(data)} </p>`
-    let key_len= Object.keys(qaqc.data).length
-    for (i=1; i< key_len; i++){
-
-    let h= `<p> Data: </p>`
+    let h = `<p> Data: </p>`
     h += '<p style="color:blue">'
+
     for (const [key, value] of Object.entries(qaqc.data)) { //List of columns and rows
       h += `<li style="color:blue">${key}: ${value}</li>`
     }
-    h += '</p>'
-    h += qaqc.saveFile(JSON.stringify(qaqc.data))
-    //debugger
-    // ...
-    return h
+
+
+
+
+
+    //Col 2 BCAC_ID array
+    for (i = 0; i < Object.entries(qaqc.data)[1][1].length; i++) {
+      console.log(Object.entries(qaqc.data)[1][1][i])
+      if (Object.entries(qaqc.data)[1][1][i] === "") {
+        alert("Check column BCAC_ID for missing entry")
+
+        h += '</p>'
+
+
+
+        h += qaqc.saveFile(JSON.stringify(qaqc.data))
+        //debugger
+        // ...
+        return h
+      }
+    }
+
   }
 }
-
-
-
-//https://stackoverflow.com/questions/7848004/get-column-from-a-two-dimensional-array
-//https://stackoverflow.com/questions/22097155/javascript-get-entire-2nd-column
-//test array
-// var array=[[1,2,3],[4,5,6],[7,8,9]]
-// runQAQC= function(data){
-//   function getCol(matrix, col){
-//      var column = [];
-//      for(var i=0; i<matrix.length; i++){
-//         column.push(matrix[i][col]);
-//      }
-//      return column;
-//   }
-//   console.log(getCol(array,2))
-// }
-
-//readFiles
-// https://www.youtube.com/watch?v=ZZncFax8yNY
-// function getAsText(fileToRead){
-//   let reader = new FileReader()
-//   reader.readAsText(fileToRead)
-//   reader.onload=loadHandler
-//   reader.onerror= errorHandler
-// }
-// function loadHandler(event){
-//     let csv = event.target.results
-//     processData(csv)
-//
-//   }
-// function handleFiles(files){
-//   if (windo.FileReader){
-//     getAsText(files[0])
-//     fileUploaded = true
-//   } else
-//   alert('FileReader not supported in browser')
-//   }
