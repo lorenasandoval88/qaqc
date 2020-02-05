@@ -2,14 +2,12 @@ runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
 
-  //let h = `<p>Variables: ${Object.keys(data)} </p>`
-  let key_len = Object.keys(qaqc.data).length
-  for (i = 1; i < key_len; i++) {
-
-    let h = `<p style= "font-weight:bold"> INPUT FILE REQUIREMENTS </p>`
-      h += `<p>(6  data variables consisting of up to 31 columns conforming to the following arrangement and format)</p>`
+  for (i = 1; i < Object.keys(qaqc.data).length; i++) {
+let h=`<p style= "color:red">Table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows uploaded</p>`
+      h +=`<p style= "font-weight:bold"> INPUT FILE REQUIREMENTS (6  data groups consisting of up to 31 columns in the following format)</p>`
       h += `<p>ID columns (12):<p/>`
-      //h += `<li>UniqueID, PersonID, Study, contrType, Status, DNA_source, DNA_sourceOt, matchId, SubStudy, Studytype, StudytypeOt, Exclusion</li>`
+
+      //columns will be called by name, not column number
         h += `<li>UniqueID</li>`
         h += `<li>PersonID</li>`
         h += `<li>Study</li>`
