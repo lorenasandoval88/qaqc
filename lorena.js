@@ -14,26 +14,27 @@ let h=`<p style= "color:red">Successfully uploaded: table with ${Object.keys(dat
           //console.log(key, value);
           upColm.push(key)
       }
-      upColm=upColm.filter(x => allColm.includes(x))
-      let intersection = upColm.join(", ")  //make const or let??????
-      h +=`<p style= "color:red">${upColm.length} column(s) with proper names found: ${intersection}</p>`
-      //if less collumns accepted than uloaded, indicate why (ie column names not in correct format. rows not in format)
+      upColm=upColm.filter(x => allColm.includes(x)) // accepted columns with proper names, need to loop through these for checks - Lorena
+      h +=`<p style= "color:red">${upColm.length} of ${Object.keys(data).length} column(s) with proper names found: ${upColm.join(", ")}</p>`
+      //if less collumns accepted than uploaded, indicate why (ie column names not in correct format. rows not in format)
 
-      //check for missing values in each column
-    for (c=0; c < Object.keys(qaqc.data).length; c++) {
-      //(Object.values(qaqc.data)[c]===qaqc.data[Object.keys(data)[0]])
-      var oneCol=((Object.values(qaqc.data)[c]))//===qaqc.data[Object.keys(data)[0]]))
-      console.log(oneCol.every(el => el === "")) // true
+    
 
-//https://zellwk.com/blog/looping-through-js-objects/ looping through object
-const keys=Object.keys(qaqc.data)
-for (const key of keys){
-  console.log(key)
-}
-const values=Object.values(qaqc.data)
-for (const value  of values){
-  console.log(value)
-}
+                                  //check for missing values in each column
+                                for (c=0; c < Object.keys(qaqc.data).length; c++) {
+                                  //(Object.values(qaqc.data)[c]===qaqc.data[Object.keys(data)[0]])
+                                  var oneCol=((Object.values(qaqc.data)[c]))//===qaqc.data[Object.keys(data)[0]]))
+                                  console.log(oneCol.every(el => el === "")) // true
+
+                                //https://zellwk.com/blog/looping-through-js-objects/ looping through object
+                                const keys=Object.keys(qaqc.data)
+                                for (const key of keys){
+                                  console.log(key)
+                                }
+                                const values=Object.values(qaqc.data)
+                                for (const value  of values){
+                                  console.log(value)
+                                }
 
 
     //  val.length === value.length[1]
