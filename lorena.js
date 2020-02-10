@@ -2,43 +2,61 @@ runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
 
-let h=`<p style= "color:red">Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
+let h=`<p style= "color:red">1.) Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
       h += `<p></p>`
 
       //check which variables have not been uploaded
       //https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
-      var upColm=[]
-      var allColm=["UniqueID", "PersonID", "Study", "contrType", "Status", "DNA_source", "DNA_sourceOt", "matchId", "SubStudy", "Studytype", "StudytypeOt", "Exclusion", "AgeInt", "intDate", "intDate_known", "intDay", "intMonth", "intYear", "refMonth", "refYear", "AgeDiagIndex", "Sex", "EthnicityClass", "EthnicitySubClass", "ethnOt", "raceM", "raceF", "FamHist", "Fhnumber", "Fhscore", "ER_statusIndex"]
+      var upCol=[]
+      var allCol=["UniqueID", "PersonID", "Study", "contrType", "Status", "DNA_source", "DNA_sourceOt", "matchId", "SubStudy", "Studytype", "StudytypeOt", "Exclusion", "AgeInt", "intDate", "intDate_known", "intDay", "intMonth", "intYear", "refMonth", "refYear", "AgeDiagIndex", "Sex", "EthnicityClass", "EthnicitySubClass", "ethnOt", "raceM", "raceF", "FamHist", "Fhnumber", "Fhscore", "ER_statusIndex"]
 
-  for (const [key, value] of Object.entries(qaqc.data)) {
-          //console.log(key, value);
-          upColm.push(key)
-      }
-      upColm=upColm.filter(x => allColm.includes(x)) // accepted columns with proper names, need to loop through these for checks - Lorena
-      h +=`<p style= "color:red">${upColm.length} of ${Object.keys(data).length} column(s) with proper names found: ${upColm.join(", ")}</p>`
+      for (var [key, value] of Object.entries(qaqc.data)) {
+          upCol.push(key)
+        }
+        upCol=upCol.filter(x => allCol.includes(x)) // accepted columns with proper names, need to loop through these for checks - Lorena
+        h +=`<p style= "color:red">2.) ${upCol.length} of ${Object.keys(data).length} column(s) with proper names found: </p>`//${upCol.join(", ")}
       //if less collumns accepted than uploaded, indicate why (ie column names not in correct format. rows not in format)
-
-    
-
-                                  //check for missing values in each column
-                                for (c=0; c < Object.keys(qaqc.data).length; c++) {
-                                  //(Object.values(qaqc.data)[c]===qaqc.data[Object.keys(data)[0]])
-                                  var oneCol=((Object.values(qaqc.data)[c]))//===qaqc.data[Object.keys(data)[0]]))
-                                  console.log(oneCol.every(el => el === "")) // true
-
-                                //https://zellwk.com/blog/looping-through-js-objects/ looping through object
-                                const keys=Object.keys(qaqc.data)
-                                for (const key of keys){
-                                  console.log(key)
-                                }
-                                const values=Object.values(qaqc.data)
-                                for (const value  of values){
-                                  console.log(value)
-                                }
+      // if more than 31 columns uploaded, indicate error? (ie 33 columns with 31 of the variables needed)
 
 
-    //  val.length === value.length[1]
-}
+      //https://zellwk.com/blog/looping-through-js-objects/ looping through object
+        const keys=Object.keys(qaqc.data)
+        const values=[]
+        for(var i =0; i<keys.length; i++ ){
+            var key = keys[i]
+            values[i]= qaqc.data[key]
+            for (j=0; j < upCol.length; j++ ){
+               if(key==upCol[j]){
+                h +=`<p style= "color:red">${key} : ${qaqc.data[key]}</p>`
+                }
+                  for (a=0; a< qaqc.data[key].length; a++){
+                    //console.log(qaqc.data[key][a])
+
+                    if (qaqc.data[key][a]===undefined && key===upCol[j] ) {
+                        h +=`<p style= "color:red">3.) Empty value found in ${key} column </p>`
+                  }
+                }
+        }
+      }
+
+
+      //for (const col  of upCol){
+      //  values.forEach((row) =>console.log(row))
+
+      // check for missing values in each column
+
+
+            // https://www.webdeveloper.com/d/77256-strip-double-quotes-of-beginning-and-end-of-string
+            // String.prototype.unquoted = function (){return this.replace (/(^")|("$)/g, '')}
+              //
+                                // for (c=0; c < Object.keys(qaqc.data).length; c++) {
+                                //   //(Object.values(qaqc.data)[c]===qaqc.data[Object.keys(data)[0]])
+                                //   var oneCol=((Object.values(qaqc.data)[c]))//===qaqc.data[Object.keys(data)[0]]))
+                                //   console.log(oneCol.every(el => el === "")) // true
+                                //
+                                // //https://zellwk.com/blog/looping-through-js-objects/ looping through object
+                                //
+                                //   }
 
       //columns will be called by name, not column number, need to list columns not uploaded
       h +=`<p style= "font-weight:bold"> INPUT FILE REQUIREMENTS: 6  data groups consisting of up to 31 columns in the following format</p>`
@@ -94,8 +112,9 @@ let h=`<p style= "color:red">Successfully uploaded: table with ${Object.keys(dat
       h += `<p>ER status column name (1): <p/>`
         h += `<li>ER_statusIndex</li>` //**ADD SPECIFIC CHECKS**
 
-
+      h += `<p></p>`
       h += `<p> Uploaded data: </p>`
+
       h += '<p style="color:blue">'
 
     for (const [key, value] of Object.entries(qaqc.data)) { //List of columns and rows
