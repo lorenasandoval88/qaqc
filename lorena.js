@@ -2,7 +2,7 @@ runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
 
-let h=`<p style= "color:red" style= "font-weight:bold">Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
+let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
       h += `<p></p>`
 
       //check which variables have not been uploaded
@@ -23,13 +23,17 @@ let h=`<p style= "color:red" style= "font-weight:bold">Successfully uploaded: ta
 
         var failedUpCol=difference(upCol, acceptedCol)
         if (failedUpCol.length>0){
-          alert("Failed to upload!")
-          var failed_str= failedUpCol.length + " and column(s) rejected"
+          alert("Failed to upload! Please see error report for details.")
+          var failed_str= "and " + failedUpCol.length + " column(s) rejected"
+          h +=`<p style= "color:red">ERROR 1) ${acceptedCol.length} column(s) processed ${failed_str}</p>`//${upCol.join(", ")}
+          h +=`<ul style= "color:red">Please check the following variable names: </ul>`
+          h +=`<ul style= "color:red"> ${failedUpCol.join(", ")}</ul>`
         } else{
            var failed_str = ""
         }
 
-        h +=`<p style= "color:red">Error 1) ${acceptedCol.length} column(s) processed ${failed_str}</p>`//${upCol.join(", ")}
+
+
 
 
       //if less collumns accepted than uploaded, indicate why (ie column names not in correct format. rows not in format)
@@ -44,13 +48,15 @@ let h=`<p style= "color:red" style= "font-weight:bold">Successfully uploaded: ta
             values[i]= qaqc.data[key]
             for (j=0; j < upCol.length; j++ ){
                if(key==acceptedCol[j]){
-                h +=`<p style= "color:red">${key} : ${qaqc.data[key]}</p>`
+                //h +=`<p style= "color:red">${key} : ${qaqc.data[key]}</p>`// accepted columns and rows
                 }
                   for (a=0; a< qaqc.data[key].length; a++){
                     //console.log(qaqc.data[key][a])
 
                     if (qaqc.data[key][a]===undefined && key===acceptedCol[j] ) {
-                        h +=`<p style= "color:red">Error 2) Empty value(s) found in ${key} column </p>`
+                        h +=`<p style= "color:red">ERROR 2) Empty value(s) found in ${key} column </p>`
+                        h +=`<ul style= "color:red">Missing values should be listed as 777 </ul>`
+
                   }
                 }
         }
