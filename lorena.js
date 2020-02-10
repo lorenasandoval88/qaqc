@@ -2,7 +2,7 @@ runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
 
-let h=`<p style= "color:red">1.) Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
+let h=`<p style= "color:red" style= "font-weight:bold">Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
       h += `<p></p>`
 
       //check which variables have not been uploaded
@@ -13,10 +13,27 @@ let h=`<p style= "color:red">1.) Successfully uploaded: table with ${Object.keys
       for (var [key, value] of Object.entries(qaqc.data)) {
           upCol.push(key)
         }
-        upCol=upCol.filter(x => allCol.includes(x)) // accepted columns with proper names, need to loop through these for checks - Lorena
-        h +=`<p style= "color:red">2.) ${upCol.length} of ${Object.keys(data).length} column(s) with proper names found: </p>`//${upCol.join(", ")}
+        acceptedCol=upCol.filter(x => allCol.includes(x)) // accepted columns with proper names, need to loop through these for checks - Lorena
+
+
+        function difference(a1, a2) {
+          var a2Set = new Set(a2);
+          return a1.filter(function(x) { return !a2Set.has(x); })
+        }
+
+        var failedUpCol=difference(upCol, acceptedCol)
+        if (failedUpCol.length>0){
+          alert("Failed to upload!")
+          var failed_str= failedUpCol.length + " and column(s) rejected"
+        } else{
+           var failed_str = ""
+        }
+
+        h +=`<p style= "color:red">Error 1) ${acceptedCol.length} column(s) processed ${failed_str}</p>`//${upCol.join(", ")}
+
+
       //if less collumns accepted than uploaded, indicate why (ie column names not in correct format. rows not in format)
-      // if more than 31 columns uploaded, indicate error? (ie 33 columns with 31 of the variables needed)
+      // if more than 31 columns uploaded, indicate error? (ie 33 columns with 31 of the variables needed
 
 
       //https://zellwk.com/blog/looping-through-js-objects/ looping through object
@@ -26,14 +43,14 @@ let h=`<p style= "color:red">1.) Successfully uploaded: table with ${Object.keys
             var key = keys[i]
             values[i]= qaqc.data[key]
             for (j=0; j < upCol.length; j++ ){
-               if(key==upCol[j]){
+               if(key==acceptedCol[j]){
                 h +=`<p style= "color:red">${key} : ${qaqc.data[key]}</p>`
                 }
                   for (a=0; a< qaqc.data[key].length; a++){
                     //console.log(qaqc.data[key][a])
 
-                    if (qaqc.data[key][a]===undefined && key===upCol[j] ) {
-                        h +=`<p style= "color:red">3.) Empty value found in ${key} column </p>`
+                    if (qaqc.data[key][a]===undefined && key===acceptedCol[j] ) {
+                        h +=`<p style= "color:red">Error 2) Empty value(s) found in ${key} column </p>`
                   }
                 }
         }
