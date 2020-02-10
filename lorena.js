@@ -2,7 +2,7 @@ runQAQC = function(data) {
   console.log(`lorena.js ran at ${Date()}`)
 
 
-let h=`<p style= "color:red">Table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows uploaded</p>`
+let h=`<p style= "color:red">Successfully uploaded: table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows</p>`
       h += `<p></p>`
 
       //check which variables have not been uploaded
@@ -14,9 +14,9 @@ let h=`<p style= "color:red">Table with ${Object.keys(data).length} columns x ${
           //console.log(key, value);
           upColm.push(key)
       }
-      console.log(upColm)
-      let intersection = upColm.filter(x => allColm.includes(x))
-      h +=`<p style= "color:red">${intersection} column(s) with proper names accepted</p>`
+      upColm=upColm.filter(x => allColm.includes(x))
+      let intersection = upColm.join(", ")  //make const or let??????
+      h +=`<p style= "color:red">${upColm.length} column(s) with proper names found: ${intersection}</p>`
       //if less collumns accepted than uloaded, indicate why (ie column names not in correct format. rows not in format)
 
       //check for missing values in each column
