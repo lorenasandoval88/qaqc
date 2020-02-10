@@ -4,60 +4,94 @@ runQAQC = function(data) {
 
 let h=`<p style= "color:red">Table with ${Object.keys(data).length} columns x ${qaqc.data[Object.keys(data)[0]].length} rows uploaded</p>`
       h += `<p></p>`
-  for (const col in qaqc.data){
-      if (col.indexOf("") > -1) {
-        missing=""
-        h +=`<p style= "color:red">${col} column has missing data<p>`
+
+      //check which variables have not been uploaded
+      //https://stackoverflow.com/questions/1187518/how-to-get-the-difference-between-two-arrays-in-javascript
+      var upColm=[]
+      var allColm=["UniqueID", "PersonID", "Study", "contrType", "Status", "DNA_source", "DNA_sourceOt", "matchId", "SubStudy", "Studytype", "StudytypeOt", "Exclusion", "AgeInt", "intDate", "intDate_known", "intDay", "intMonth", "intYear", "refMonth", "refYear", "AgeDiagIndex", "Sex", "EthnicityClass", "EthnicitySubClass", "ethnOt", "raceM", "raceF", "FamHist", "Fhnumber", "Fhscore", "ER_statusIndex"]
+
+  for (const [key, value] of Object.entries(qaqc.data)) {
+          //console.log(key, value);
+          upColm.push(key)
+      }
+      console.log(upColm)
+      let intersection = upColm.filter(x => allColm.includes(x))
+      h +=`<p style= "color:red">${intersection} columns accepted</p>`
+      //if less collumns accepted than uloaded, indicate why (ie column names not in correct format. rows not in format)
+
+      //check for missing values in each column
+    for (c=0; c < Object.keys(qaqc.data).length; c++) {
+      //(Object.values(qaqc.data)[c]===qaqc.data[Object.keys(data)[0]])
+      var oneCol=((Object.values(qaqc.data)[c]))//===qaqc.data[Object.keys(data)[0]]))
+      console.log(oneCol.every(el => el === "")) // true
+
+//https://zellwk.com/blog/looping-through-js-objects/ looping through object
+const keys=Object.keys(qaqc.data)
+for (const key of keys){
+  console.log(key)
 }
-      //columns will be called by name, not column number????
-      h +=`<p style= "font-weight:bold"> INPUT FILE REQUIREMENTS (6  data groups consisting of up to 31 columns in the following format)</p>`
-      h += `<p>Example input files are available via the "Download Example Input Files" link in the left panel of this page.<p/>`
+const values=Object.values(qaqc.data)
+for (const value  of values){
+  console.log(value)
+}
+
+
+    //  val.length === value.length[1]
+}
+
+      //columns will be called by name, not column number, need to list columns not uploaded
+      h +=`<p style= "font-weight:bold"> INPUT FILE REQUIREMENTS: 6  data groups consisting of up to 31 columns in the following format</p>`
+      h += `<p style="font-size: 10px">Example input files available via the "Download Example Input Files" link on the left panel.<p/>`
+                    //Hover to display text? https://codepen.io/Paulie-D/pen/OVRJBx
 
       h += `<p>ID column names (12):<p/>`
-        h += `<li>UniqueID - unique person identifier (Concatenation of Study Acronym, "-", and PersonID)</li>`
-        h += `<li>PersonID</li>`
-        h += `<li>Study</li>`
-        h += `<li>contrType</li>`
-        h += `<li>Status</li>`
-        h += `<li>DNA_source</li>`
-        h += `<li>DNA_sourceOt</li>`
-        h += `<li>matchId</li>`
-        h += `<li>SubStudy</li>`
-        h += `<li>Studytype</li>`
-        h += `<li>StudytypeOt</li>`
-        h += `<li>Exclusion</li>`
+        h += `<li>UniqueID</li>` // unique person identifier (Concatenation of Study Acronym, "-", and PersonID)
+        h += `<li>PersonID</li>` //Check whether PersonID is unique within each study: for a few studies this is not the case, for one study this variable was missing; however, since UniqueID is unique for all studies, nothing needs to be changed
+        h += `<li>Study</li>` //assigned by study, (1) not null
+        h += `<li>contrType</li>` // 1=population-based, 2=hospital-based, 3=family-based, 4=blood donor, 5 =nested case-control, 6=BRCA1/2 carrier without bc, 777=NA=not applicable (for cases), 888=DK=don't know, (1) if contrType = 777, then status should NOT be 0,
+                                  //(2) if contrType ≠ 777 or 888, then status should be 0 or 9, (3) if status = 0 and contrtype is missing, update contrType with 888 or the correct contrtype. (4) if contrType is missing or 888 and status = 1, 2, or 3, update contrType with 777
+                                  //(5) ContrType should not be left blank, highlight those records to centre if both controlType and status are missing
+
+        h += `<li>Status</li>` //**ADD SPECIFIC CHECKS**  0=control, 1=invasive case, 2=in-situ case, 3=case unknown invasiveness, 9=excluded sample
+        h += `<li>DNA_source</li>` //1=whole blood, 2=buccal cell, 3=mouthwash/saliva, 4=other, 5=no DNA, 888=DK
+        h += `<li>DNA_sourceOt</li>` // (1)if DNA_source = 888 then DNA_sourceOt = 888, (2) if DNA_source = 4 ('other'), DNA_sourceOt = text details of how DNA is collected (numberic data are not allowed)
+        h += `<li>matchId</li>` //**ADD SPECIFIC CHECKS**  777=NA, 888=DK
+        h += `<li>SubStudy</li>` //**ADD SPECIFIC CHECKS** 777=NA, 888=DK
+        h += `<li>Studytype</li>` // 0='sporadic' (population or hospital based), 1='familial' (clinical genetic centre based), 2=other, 777=control, 888=DK, (1) if status=0 then StudyType should be 777
+        h += `<li>StudytypeOt</li>` // (1)if Studytype = 888 then StudytypeOt = 888, (2) if Studytype = 2 ('other'), StudytypeOt = text details of study type (numberic data are not allowed)
+        h += `<li>Exclusion</li>` //**ADD SPECIFIC CHECKS**  0=include, 5=no phenotypic data, 6=other, 7=non-breast carcinoma (e.g. sarcoma), 8=duplicate sample, 888=DK
 
       h += `<p></p>`
       h += `<p>Age column names (9):<p/>`
-        h += `<li>AgeInt</li>`
-        h += `<li>intDate</li>`
-        h += `<li>intDate_known</li>`
-        h += `<li>intDay</li>`
-        h += `<li>intMonth</li>`
-        h += `<li>intYear</li>`
-        h += `<li>refMonth</li>`
-        h += `<li>refYear</li>`
-        h += `<li>AgeDiagIndex</li>`
+        h += `<li>AgeInt</li>` // **ADD SPECIFIC CHECKS**  years, 888=DK
+        h += `<li>intDate</li>` // dd/mm/yyyy, 08/08/8000=DK
+        h += `<li>intDate_known</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>intDay</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>intMonth</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>intYear</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>refMonth</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>refYear</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>AgeDiagIndex</li>` //**ADD SPECIFIC CHECKS**
 
       h += `<p></p>`
       h += `<p>Sex column name (1):<p/>`
-      h += `<li>sex</li>`
+      h += `<li>sex</li>`//**ADD SPECIFIC CHECKS**
 
       h += `<p></p>`
       h += `<p>Ethnicity column names (3): <p/>`
-        h += `<li>EthnicityClass</li>`
-        h += `<li>EthnicitySubClass</li>`
-        h += `<li>ethnOt</li>`
+        h += `<li>EthnicityClass</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>EthnicitySubClass</li>` //1=Northern European, 2=Southern European, 3=Western European, 4=Eastern European, 5=American European, 6=Hispanic American, 7=African (Africa), 8=Carribbean African, 9=American African, 10=Indian, 11=Pakistani, 12=East and West Bengali, 13=Chinese, 14=Malaysian Peninsula, 15=Japanese, 16=Other (including 'mixed race'), 888=DK
+        h += `<li>ethnOt</li>` //(1) if EthnicityClass = 888 then ethnOt = 888, (2) if Ethnicityclass = 16 ('other'), ethOt= text details of ethnicity (numberic data are not allowed)
 
       h += `<p></p>`
       h += `<p>Family history column names (3): <p/>`
-        h += `<li>FamHist</li>`
-        h += `<li>Fhnumber</li>`
-        h += `<li>Fhscore</li>`
+        h += `<li>FamHist</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>Fhnumber</li>` //**ADD SPECIFIC CHECKS**
+        h += `<li>Fhscore</li>` //**ADD SPECIFIC CHECKS**
 
       h += `<p></p>`
       h += `<p>ER status column name (1): <p/>`
-        h += `<li>ER_statusIndex</li>`
+        h += `<li>ER_statusIndex</li>` //**ADD SPECIFIC CHECKS**
 
 
       h += `<p> Uploaded data: </p>`
@@ -79,8 +113,10 @@ let h=`<p style= "color:red">Table with ${Object.keys(data).length} columns x ${
         //debugger
         // ...
         return h
-      }
-}
-
-//   }
+    }
+// }
+// for (const col in qaqc.data){
+//     if (col.indexOf("") > -1) {
+//       missing=""
+//       h +=`<p style= "color:red">${col} column has missing data<p>`
 // }
