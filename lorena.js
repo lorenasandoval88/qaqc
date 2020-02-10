@@ -24,15 +24,19 @@ let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with
         var failedUpCol=difference(upCol, acceptedCol)
         if (failedUpCol.length>0){
           alert("Failed to upload! Please see error report for details.")
-          var failed_str= "and " + failedUpCol.length + " column(s) rejected"
-          h +=`<p style= "color:red">ERROR 1) ${acceptedCol.length} column(s) processed ${failed_str}</p>`//${upCol.join(", ")}
-          h +=`<ul style= "color:red">Please check the following variable names: </ul>`
+          var failed_str= " The following "+ failedUpCol.length + " column(s) rejected:"
+          h +=`<p style= "color:red">ERROR 1)${failed_str}</p>`//${upCol.join(", ")}
           h +=`<ul style= "color:red"> ${failedUpCol.join(", ")}</ul>`
+          h +=`<ul style= "color:red;font-size: 10px"> Variable options:</ul>`
+          h +=`<ul style= "color:red;font-size: 10px"> ${allCol.join(", ")}</ul>`
+
         } else{
            var failed_str = ""
         }
-
-
+        //
+        // Embedded spaces or special characters are not allowed.
+        //
+        // Supplementary characters are not allowed.
 
 
 
