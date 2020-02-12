@@ -25,10 +25,9 @@ let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with
         if (failedUpCol.length>0){
           alert("Failed to upload! Please see error report for details.")
           var failed_str= " The following "+ failedUpCol.length + " column(s) rejected:"
-          h +=`<p style= "color:red">ERROR 1)${failed_str}</p>`//${upCol.join(", ")}
+          h +=`<p style= "color:red">ERROR: ${failed_str}</p>`//${upCol.join(", ")}
           h +=`<ul style= "color:red"> ${failedUpCol.join(", ")}</ul>`
-          h +=`<ul style= "color:red;font-size: 10px"> Variable options:</ul>`
-          h +=`<ul style= "color:red;font-size: 10px"> ${allCol.join(", ")}</ul>`
+          h +=`<ul style= "color:red;font-size: 10px">Variable options: ${allCol.join(", ")}</ul>`
 
         } else{
            var failed_str = ""
@@ -38,11 +37,8 @@ let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with
         //
         // Supplementary characters are not allowed.
 
-
-
       //if less collumns accepted than uploaded, indicate why (ie column names not in correct format. rows not in format)
       // if more than 31 columns uploaded, indicate error? (ie 33 columns with 31 of the variables needed
-
 
       //https://zellwk.com/blog/looping-through-js-objects/ looping through object
         const keys=Object.keys(qaqc.data)
@@ -58,10 +54,10 @@ let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with
                     //console.log(qaqc.data[key][a])
 
                     if (qaqc.data[key][a]===undefined && key===acceptedCol[j] ) {
-                        h +=`<p style= "color:red">ERROR 2) Empty value(s) found in ${key} column </p>`
+                        h +=`<p style= "color:red">ERROR: Empty value(s) found in ${key} column </p>`
                         h +=`<ul style= "color:red">Missing values should be listed as 777 </ul>`
 
-                  }
+                  }{ break; }
                 }
         }
       }
