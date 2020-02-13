@@ -135,14 +135,14 @@ let h=`<p style= "color:red; font-weight:bold">Successfully uploaded: table with
       h += `<p>ER status column name (1): <p/>`
         h += `<li>ER_statusIndex</li>` //**ADD SPECIFIC CHECKS**
 
-      h += `<p></p>`
-      h += `<p> Uploaded data: </p>`
+//       h += `<p></p>`
+//       h += `<p> Uploaded data: </p>`
 
-      h += '<p style="color:blue">'
+//       h += '<p style="color:blue">'
 
-    for (const [key, value] of Object.entries(qaqc.data)) { //List of columns and rows
-      h += `<li style="color:blue">${key}: ${value}</li>`
-    }
+//     for (const [key, value] of Object.entries(qaqc.data)) { //List of columns and rows
+//       h += `<li style="color:blue">${key}: ${value}</li>`
+//     }
 
     // //Col 2 BCAC_ID array
     // for (i = 0; i < Object.entries(qaqc.data)[1][1].length; i++) {
